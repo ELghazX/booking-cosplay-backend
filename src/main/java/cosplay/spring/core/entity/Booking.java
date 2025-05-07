@@ -21,11 +21,13 @@ public class Booking {
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
+    private Long kostumId;
     private Kostum kostum;
     private String namaPenyewa;
     private String kontak;
     private LocalDate tanggalMulai;
-    private String durasiSewa;
+    private LocalDate tanggalSelesai;
+    private String tipeSewa;
     private String status;
 
     public Long getId() {
@@ -33,6 +35,12 @@ public class Booking {
     }
     public void setId(Long id) {
         this.id = id;
+    }
+    public Long getKostumId() {
+        return kostumId;
+    }
+    public void setKostumId(Long kostumId) {
+        this.kostumId = kostumId;
     }
     public Kostum getKostum() {
         return kostum;
@@ -58,11 +66,17 @@ public class Booking {
     public void setTanggalMulai(LocalDate tanggalMulai) {
         this.tanggalMulai = tanggalMulai;
     }
-    public String getDurasiSewa() {
-        return durasiSewa;
+    public LocalDate getTanggalSelesai() {
+        return tanggalSelesai;
     }
-    public void setDurasiSewa(String durasiSewa) {
-        this.durasiSewa = durasiSewa;
+    public void setTanggalSelesai(LocalDate tanggalSelesai) {
+        this.tanggalSelesai = tanggalSelesai;
+    }
+    public String getTipeSewa() {
+        return tipeSewa;
+    }
+    public void setTipeSewa(String tipeSewa) {
+        this.tipeSewa = tipeSewa;
     }
     public String getStatus() {
         return status;
