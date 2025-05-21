@@ -4,34 +4,19 @@ import jakarta.persistence.*;
 
 @Entity
 public class User {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   private String name;
   private String email;
+  private String phone; // New field for phone number
   private String password;
+  private String role = "USER"; // Default role is "USER"
 
-  @Enumerated(EnumType.STRING)
-  private Role role;
+  // Getters and Setters
 
-  public enum Role {
-    ADMIN, USER
-  }
-
-  // Constructor
-  public User() {
-  }
-
-  public User(Long id, String name, String email, String password, Role role) {
-    this.id = id;
-    this.name = name;
-    this.email = email;
-    this.password = password;
-    this.role = role;
-  }
-
-  // Getter & Setter
   public Long getId() {
     return id;
   }
@@ -56,6 +41,14 @@ public class User {
     this.email = email;
   }
 
+  public String getPhone() {
+    return phone;
+  }
+
+  public void setPhone(String phone) {
+    this.phone = phone;
+  }
+
   public String getPassword() {
     return password;
   }
@@ -64,11 +57,11 @@ public class User {
     this.password = password;
   }
 
-  public Role getRole() {
+  public String getRole() {
     return role;
   }
 
-  public void setRole(Role role) {
+  public void setRole(String role) {
     this.role = role;
   }
 }
