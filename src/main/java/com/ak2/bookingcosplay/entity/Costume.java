@@ -1,14 +1,24 @@
 package com.ak2.bookingcosplay.entity;
 
+import jakarta.persistence.*;
+
+@Entity
 public class Costume implements Item {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String name;
   private String description;
   private String pricePerDay;
-  private String pricePerWeek;
   private String size;
+  private String pricePerWeek;
   private String characterName;
   private String gender;
+  private String imageUrl;
+
+  public Costume() {
+  };
 
   public Costume(Long id, String name, String description, String pricePerDay, String pricePerWeek,
       String size, String characterName, String gender) {
