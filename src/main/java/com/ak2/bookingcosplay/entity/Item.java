@@ -1,30 +1,37 @@
 package com.ak2.bookingcosplay.entity;
 
+import com.fasterxml.jackson.annotation.*;
+
 import jakarta.persistence.*;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.JOINED) // Specifies the inheritance strategy for JPA
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "type")
+
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = Costume.class, name = "costume"),
+    @JsonSubTypes.Type(value = Accessory.class, name = "accessory")
+})
 public abstract class Item {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   private String name;
   private String imageUrl;
-  private Integer pricePerDay;
+  private double pricePerDay;
+  private boolean deleted = false;
 
-  // Constructor
-  public Item() {
+  public boolean isDeleted() {
+    return deleted;
   }
 
-  public Item(Long id, String name, String imageUrl, Integer pricePerDay) {
-    this.id = id;
-    this.name = name;
-    this.imageUrl = imageUrl;
-    this.pricePerDay = pricePerDay;
+  public void setDeleted(boolean deleted) {
+    this.deleted = deleted;
   }
 
-  // Getter & Setter
+  // Getters and Setters
   public Long getId() {
     return id;
   }
@@ -49,11 +56,11 @@ public abstract class Item {
     this.imageUrl = imageUrl;
   }
 
-  public Integer getPricePerDay() {
+  public double getPricePerDay() {
     return pricePerDay;
   }
 
-  public void setPricePerDay(Integer pricePerDay) {
+  public void setPricePerDay(double pricePerDay) {
     this.pricePerDay = pricePerDay;
   }
 }

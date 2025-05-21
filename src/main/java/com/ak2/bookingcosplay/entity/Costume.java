@@ -1,23 +1,23 @@
 package com.ak2.bookingcosplay.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 
 @Entity
 public class Costume extends Item {
+
+  private String size; // S, M, L, XL
   private String characterName;
-  private String gender;
+  private String gender; // Male, Female, etc.
 
-  // Constructor
-  public Costume() {
+  // Getters and Setters
+  public String getSize() {
+    return size;
   }
 
-  public Costume(Long id, String name, String imageUrl, Integer pricePerDay, String characterName, String gender) {
-    super(id, name, imageUrl, pricePerDay);
-    this.characterName = characterName;
-    this.gender = gender;
+  public void setSize(String size) {
+    this.size = size;
   }
 
-  // Getter & Setter
   public String getCharacterName() {
     return characterName;
   }

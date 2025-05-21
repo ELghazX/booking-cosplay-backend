@@ -1,21 +1,13 @@
 package com.ak2.bookingcosplay.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
 
 @Entity
 public class Accessory extends Item {
-  private String type; // "Senjata", "Kepala", "Perhiasan"
 
-  // Constructor
-  public Accessory() {
-  }
+  private String type; // Can be "senjata", "kepala", or "perhiasan"
 
-  public Accessory(Long id, String name, String imageUrl, Integer pricePerDay, String type) {
-    super(id, name, imageUrl, pricePerDay);
-    this.type = type;
-  }
-
-  // Getter & Setter
+  // Getters and Setters
   public String getType() {
     return type;
   }

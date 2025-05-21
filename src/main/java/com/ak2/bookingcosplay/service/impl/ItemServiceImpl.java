@@ -15,20 +15,33 @@ public class ItemServiceImpl implements ItemService {
   private ItemRepository itemRepository;
 
   @Override
-  public List<Item> getItemsByName(String name) {
-    return itemRepository.findByNameContaining(name);
+  public Item createItem(Item item) {
+    return itemRepository.save(item);
   }
 
   @Override
-  public List<Item> getItemsByType(String type) {
-    if ("costume".equalsIgnoreCase(type)) {
-      // Find all costumes
-      return itemRepository.findByNameContaining("costume");
-    } else if ("accessory".equalsIgnoreCase(type)) {
-      // Find all accessories
-      return itemRepository.findByNameContaining("accessory");
-    } else {
-      return itemRepository.findAll();
+  public List<Item> getAllItems() {
+    return itemRepository.findByDeletedFalse(); // Only get non-deleted items
+  }
+
+  @Override
+  public Item getItemById(Long id) {
+    return itemRepository.findById(id).filter(item -> !item.isDeleted()).orElse(null); // Ensure the item is not deleted
+  }
+
+  @Override
+  public Item updateItem(Long id, Item item) {
+    item.setId(id);
+    return itemRepository.save(item);
+  }
+
+  @Override
+  public void deleteItem(Long id) {
+    // Instead of actually deleting, mark the item as deleted
+    Item item = itemRepository.findById(id).orElse(null);
+    if (item != null) {
+      item.setDeleted(true);
+      itemRepository.save(item); // Update the item to set deleted flag to true
     }
   }
 }

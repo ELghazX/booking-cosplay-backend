@@ -14,19 +14,30 @@ public class ItemController {
   @Autowired
   private ItemService itemService;
 
+  @PostMapping
+  public Item createItem(@RequestBody Item item) {
+    return itemService.createItem(item);
+  }
+
   @GetMapping
-  public List<Item> getItems(@RequestParam(required = false) String type, @RequestParam(required = false) String name) {
-    if (type != null) {
-      return itemService.getItemsByType(type);
-    }
-    if (name != null) {
-      return itemService.getItemsByName(name);
-    }
-    return itemService.getItemsByType(""); // Return all items if no filter provided
+  public List<Item> getAllItems() {
+    return itemService.getAllItems();
   }
 
   @GetMapping("/{id}")
   public Item getItemById(@PathVariable Long id) {
-    return itemService.getItemsByType("all").stream().filter(item -> item.getId().equals(id)).findFirst().orElse(null);
+    return itemService.getItemById(id);
+  }
+
+  // Update item by ID
+  @PutMapping("/{id}")
+  public Item updateItem(@PathVariable Long id, @RequestBody Item item) {
+    return itemService.updateItem(id, item);
+  }
+
+  // Soft delete item by ID
+  @DeleteMapping("/{id}")
+  public void deleteItem(@PathVariable Long id) {
+    itemService.deleteItem(id);
   }
 }
