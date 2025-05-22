@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED) // Specifies the inheritance strategy for JPA
+@Inheritance(strategy = InheritanceType.JOINED)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "type")
 
 @JsonSubTypes({

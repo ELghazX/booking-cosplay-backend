@@ -7,7 +7,7 @@ public class Costume extends Item {
 
   private String size; // S, M, L, XL
   private String characterName;
-  private String gender; // Male, Female, etc.
+  private String gender; // Male, Female
 
   // Getters and Setters
   public String getSize() {

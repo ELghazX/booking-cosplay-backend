@@ -5,7 +5,7 @@ import jakarta.persistence.Entity;
 @Entity
 public class Accessory extends Item {
 
-  private String type; // Can be "senjata", "kepala", or "perhiasan"
+  private String type; // "senjata", "kepala", or "perhiasan"
 
   // Getters and Setters
   public String getType() {
