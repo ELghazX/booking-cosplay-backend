@@ -1,6 +1,7 @@
 package com.ak2.bookingcosplay.service.impl;
 
 import com.ak2.bookingcosplay.dto.ResponseCardItem;
+import com.ak2.bookingcosplay.dto.ResponseDefault;
 import com.ak2.bookingcosplay.entity.Accessory;
 import com.ak2.bookingcosplay.entity.Costume;
 import com.ak2.bookingcosplay.entity.Item;
@@ -18,8 +19,23 @@ public class ItemServiceImpl implements ItemService {
   private ItemRepository itemRepository;
 
   @Override
-  public Item createItem(Item item) {
-    return itemRepository.save(item);
+  public ResponseDefault createItem(Item item) {
+    try {
+      itemRepository.save(item);
+      ResponseDefault response = new ResponseDefault();
+      response.setStatus(true);
+      if (item instanceof Costume) {
+        response.setMessage("Kostum berhasil ditambahkan");
+      } else if (item instanceof Accessory) {
+        response.setMessage("Aksesoris berhasil ditambahkan");
+      }
+      return response;
+    } catch (Exception e) {
+      ResponseDefault response = new ResponseDefault();
+      response.setStatus(false);
+      response.setMessage("Gagal menambahkan item: " + e.getMessage());
+      return response;
+    }
   }
 
   @Override

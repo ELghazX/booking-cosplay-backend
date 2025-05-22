@@ -1,12 +1,13 @@
 package com.ak2.bookingcosplay.service;
 
 import com.ak2.bookingcosplay.dto.ResponseCardItem;
+import com.ak2.bookingcosplay.dto.ResponseDefault;
 import com.ak2.bookingcosplay.entity.Item;
 
 import java.util.List;
 
 public interface ItemService {
-  Item createItem(Item item);
+  ResponseDefault createItem(Item item);
 
   List<ResponseCardItem> getAllItems();
 
