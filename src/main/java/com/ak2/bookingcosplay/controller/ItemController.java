@@ -31,8 +31,11 @@ public class ItemController {
     costume.setSize(request.getSize());
     costume.setGender(request.getGender());
     costume.setCharacterName(request.getCharacterName());
-
-    return ResponseEntity.ok(itemService.createItem(costume));
+    ResponseDefault response = itemService.createItem(costume);
+    if (response.isStatus() == false) {
+      return ResponseEntity.badRequest().body(response);
+    }
+    return ResponseEntity.ok(response);
   }
 
   @PostMapping("/accessory")
@@ -42,8 +45,11 @@ public class ItemController {
     accessory.setImageUrl(request.getImageUrl());
     accessory.setPricePerDay(request.getPricePerDay());
     accessory.setType(request.getType());
-
-    return ResponseEntity.ok(itemService.createItem(accessory));
+    ResponseDefault response = itemService.createItem(accessory);
+    if (response.isStatus() == false) {
+      return ResponseEntity.badRequest().body(response);
+    }
+    return ResponseEntity.ok(response);
   }
 
   @GetMapping
