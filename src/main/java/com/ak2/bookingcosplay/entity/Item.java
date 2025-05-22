@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "type")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "category")
 
 @JsonSubTypes({
     @JsonSubTypes.Type(value = Costume.class, name = "costume"),
@@ -20,18 +20,9 @@ public abstract class Item {
 
   private String name;
   private String imageUrl;
-  private double pricePerDay;
+  private int pricePerDay;
   private boolean deleted = false;
 
-  public boolean isDeleted() {
-    return deleted;
-  }
-
-  public void setDeleted(boolean deleted) {
-    this.deleted = deleted;
-  }
-
-  // Getters and Setters
   public Long getId() {
     return id;
   }
@@ -56,11 +47,20 @@ public abstract class Item {
     this.imageUrl = imageUrl;
   }
 
-  public double getPricePerDay() {
+  public int getPricePerDay() {
     return pricePerDay;
   }
 
-  public void setPricePerDay(double pricePerDay) {
+  public void setPricePerDay(int pricePerDay) {
     this.pricePerDay = pricePerDay;
   }
+
+  public boolean isDeleted() {
+    return deleted;
+  }
+
+  public void setDeleted(boolean deleted) {
+    this.deleted = deleted;
+  }
+
 }
