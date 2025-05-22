@@ -1,5 +1,6 @@
 package com.ak2.bookingcosplay.service;
 
+import com.ak2.bookingcosplay.dto.ResponseCardItem;
 import com.ak2.bookingcosplay.entity.Item;
 
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 public interface ItemService {
   Item createItem(Item item);
 
-  List<Item> getAllItems();
+  List<ResponseCardItem> getAllItems();
 
   Item getItemById(Long id);
 

@@ -1,5 +1,8 @@
 package com.ak2.bookingcosplay.service.impl;
 
+import com.ak2.bookingcosplay.dto.ResponseCardItem;
+import com.ak2.bookingcosplay.entity.Accessory;
+import com.ak2.bookingcosplay.entity.Costume;
 import com.ak2.bookingcosplay.entity.Item;
 import com.ak2.bookingcosplay.repository.ItemRepository;
 import com.ak2.bookingcosplay.service.ItemService;
@@ -20,8 +23,21 @@ public class ItemServiceImpl implements ItemService {
   }
 
   @Override
-  public List<Item> getAllItems() {
-    return itemRepository.findByDeletedFalse(); // Only get non-deleted items
+  public List<ResponseCardItem> getAllItems() {
+    List<Item> itemCard = itemRepository.findByDeletedFalse();
+    return itemCard.stream().map(item -> {
+      ResponseCardItem response = new ResponseCardItem();
+      response.setId(item.getId());
+      response.setName(item.getName());
+      response.setPrice(item.getPricePerDay());
+      if (item instanceof Costume) {
+        response.setCategory("Costume");
+      } else if (item instanceof Accessory) {
+        response.setCategory("Accessory");
+      }
+      return response;
+    }).toList();
+
   }
 
   @Override

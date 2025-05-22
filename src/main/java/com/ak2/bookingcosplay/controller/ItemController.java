@@ -1,5 +1,6 @@
 package com.ak2.bookingcosplay.controller;
 
+import com.ak2.bookingcosplay.dto.ResponseCardItem;
 import com.ak2.bookingcosplay.entity.Item;
 import com.ak2.bookingcosplay.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/items")
+@RequestMapping("/item")
 public class ItemController {
 
   @Autowired
@@ -20,7 +21,7 @@ public class ItemController {
   }
 
   @GetMapping
-  public List<Item> getAllItems() {
+  public List<ResponseCardItem> getAllItems() {
     return itemService.getAllItems();
   }
 
