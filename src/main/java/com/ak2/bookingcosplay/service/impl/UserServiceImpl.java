@@ -19,20 +19,27 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public ResponseRegister register(User user) {
-    ResponseRegister response = new ResponseRegister();
-    if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+    try {
+      ResponseRegister response = new ResponseRegister();
+      if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+        response.setStatus(false);
+        response.setMessage("Email sudah terdaftar");
+        return response;
+      }
+
+      user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+      userRepository.save(user);
+
+      response.setStatus(true);
+      response.setMessage("Registrasi berhasil");
+      return response;
+    } catch (Exception e) {
+      ResponseRegister response = new ResponseRegister();
       response.setStatus(false);
-      response.setMessage("Email sudah terdaftar");
+      response.setMessage("Registrasi gagal: " + e.getMessage());
       return response;
     }
-
-    user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-    userRepository.save(user);
-
-    response.setStatus(true);
-    response.setMessage("Registrasi berhasil");
-    return response;
   }
 
   @Override
