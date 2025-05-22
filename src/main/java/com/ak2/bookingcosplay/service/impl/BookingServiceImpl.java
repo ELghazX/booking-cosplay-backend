@@ -1,5 +1,7 @@
 package com.ak2.bookingcosplay.service.impl;
 
+import com.ak2.bookingcosplay.dto.RequestUpdateBooking;
+import com.ak2.bookingcosplay.dto.RequestCreateBooking;
 import com.ak2.bookingcosplay.entity.Booking;
 import com.ak2.bookingcosplay.entity.User;
 import com.ak2.bookingcosplay.entity.Item;
@@ -10,14 +12,12 @@ import com.ak2.bookingcosplay.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.lang.foreign.Linker.Option;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class BookingServiceImpl implements BookingService {
+  // public class BookingServiceImpl {
 
   @Autowired
   private BookingRepository bookingRepository;
@@ -29,17 +29,17 @@ public class BookingServiceImpl implements BookingService {
   private ItemRepository itemRepository;
 
   @Override
-  public String createBooking(Long userId, Long itemId, LocalDate startDate, int duration) {
+  public String createBooking(RequestCreateBooking request) {
 
     Booking booking = new Booking();
-    Optional<User> userOpt = userRepository.findById(userId);
+    Optional<User> userOpt = userRepository.findById(request.getUserId());
     if (userOpt.isPresent()) {
       User user = userOpt.get();
-      booking.setUser(userOpt.get());
+      booking.setUser(user);
     } else {
       return "Id user tidak ditemukan";
     }
-    Optional<Item> itemOpt = itemRepository.findById(itemId);
+    Optional<Item> itemOpt = itemRepository.findById(request.getItemId());
 
     if (itemOpt.isPresent()) {
       Item item = itemOpt.get();
@@ -47,13 +47,42 @@ public class BookingServiceImpl implements BookingService {
     } else {
       return "Id Item tidak ditemukan";
     }
-    booking.setStartDate(startDate);
-    booking.setDuration(duration);
+    booking.setStartDate(request.getStartDate());
+    booking.setDuration(request.getDuration());
     booking.setStatus("PENDING");
 
     bookingRepository.save(booking);
     return "booking berhasil";
+
   }
+
+  // @Override
+  // public String createBooking(Long userId, Long itemId, LocalDate startDate,
+  // int duration) {
+  //
+  // Booking booking = new Booking();
+  // Optional<User> userOpt = userRepository.findById(userId);
+  // if (userOpt.isPresent()) {
+  // User user = userOpt.get();
+  // booking.setUser(userOpt.get());
+  // } else {
+  // return "Id user tidak ditemukan";
+  // }
+  // Optional<Item> itemOpt = itemRepository.findById(itemId);
+  //
+  // if (itemOpt.isPresent()) {
+  // Item item = itemOpt.get();
+  // booking.setItem(item);
+  // } else {
+  // return "Id Item tidak ditemukan";
+  // }
+  // booking.setStartDate(startDate);
+  // booking.setDuration(duration);
+  // booking.setStatus("PENDING");
+  //
+  // bookingRepository.save(booking);
+  // return "booking berhasil";
+  // }
 
   @Override
   public List<Booking> getAllBooking() {
@@ -66,9 +95,16 @@ public class BookingServiceImpl implements BookingService {
   }
 
   @Override
-  public Booking updateBooking(Long id, Booking item) {
-    item.setId(id);
-    return bookingRepository.save(item);
+  public String updateBooking(RequestUpdateBooking request) {
+    Booking bookingOpt = bookingRepository.findById(request.getId()).orElse(null);
+    if (bookingOpt != null) {
+      bookingOpt.setStatus(request.getStatus());
+      bookingRepository.save(bookingOpt);
+      return "Update booking berhasil";
+    } else {
+      return "Id booking tidak ditemukan";
+    }
+
   }
 
   // @Override

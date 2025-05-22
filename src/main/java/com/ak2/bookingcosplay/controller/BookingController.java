@@ -1,6 +1,8 @@
 package com.ak2.bookingcosplay.controller;
 
 import com.ak2.bookingcosplay.entity.Booking;
+import com.ak2.bookingcosplay.dto.RequestUpdateBooking;
+import com.ak2.bookingcosplay.dto.RequestCreateBooking;
 import com.ak2.bookingcosplay.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +29,13 @@ public class BookingController {
   }
 
   @PostMapping
-  public String createBooking(@RequestParam Long userId, Long itemId, LocalDate startDate, int duration) {
-    return bookingService.createBooking(userId, itemId, startDate, duration);
+  public String createBooking(@RequestBody RequestCreateBooking request) {
+    return bookingService.createBooking(request);
+  }
+
+  @PutMapping("/{id}")
+  public String updateBooking(@PathVariable Long id, @RequestBody RequestUpdateBooking request) {
+    request.setId(id);
+    return bookingService.updateBooking(request);
   }
 }
