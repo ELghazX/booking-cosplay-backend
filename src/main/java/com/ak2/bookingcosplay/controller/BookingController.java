@@ -3,6 +3,8 @@ package com.ak2.bookingcosplay.controller;
 import com.ak2.bookingcosplay.entity.Booking;
 import com.ak2.bookingcosplay.dto.RequestUpdateBooking;
 import com.ak2.bookingcosplay.dto.ResponseDefault;
+import com.ak2.bookingcosplay.dto.ResponseDetailBooking;
+import com.ak2.bookingcosplay.dto.ResponsePendingBooking;
 import com.ak2.bookingcosplay.dto.RequestCreateBooking;
 import com.ak2.bookingcosplay.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/booking")
+@RequestMapping("/bookings")
 public class BookingController {
 
   @Autowired
@@ -24,9 +25,18 @@ public class BookingController {
     return bookingService.getAllBooking();
   }
 
+  @GetMapping("/status/{status}")
+  public ResponseEntity<ResponsePendingBooking> getBookingByStatus(@PathVariable String status) {
+    return ResponseEntity.ok(bookingService.getBookingByStatus(status));
+  }
+
   @GetMapping("/{id}")
-  public Optional<Booking> getBookingById(@PathVariable Long id) {
-    return bookingService.getBookingById(id);
+  public ResponseEntity<ResponseDetailBooking> getBookingById(@PathVariable Long id) {
+    ResponseDetailBooking response = bookingService.getBookingDetailById(id);
+    if (!response.isStatus()) {
+      return ResponseEntity.badRequest().body(response);
+    }
+    return ResponseEntity.ok(response);
   }
 
   @PostMapping

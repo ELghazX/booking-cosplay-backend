@@ -2,11 +2,12 @@ package com.ak2.bookingcosplay.service;
 
 import com.ak2.bookingcosplay.dto.RequestUpdateBooking;
 import com.ak2.bookingcosplay.dto.ResponseDefault;
+import com.ak2.bookingcosplay.dto.ResponseDetailBooking;
+import com.ak2.bookingcosplay.dto.ResponsePendingBooking;
 import com.ak2.bookingcosplay.dto.RequestCreateBooking;
 import com.ak2.bookingcosplay.entity.Booking;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface BookingService {
   // Booking createBooking(Booking item);
@@ -15,9 +16,11 @@ public interface BookingService {
   // duration);
   ResponseDefault createBooking(RequestCreateBooking request);
 
+  ResponsePendingBooking getBookingByStatus(String status);
+
   List<Booking> getAllBooking();
 
-  Optional<Booking> getBookingById(Long id);
+  ResponseDetailBooking getBookingDetailById(Long id);
 
   // Booking updateBooking(Long id, Booking item);
 

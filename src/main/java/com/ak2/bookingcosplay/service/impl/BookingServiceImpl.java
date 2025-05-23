@@ -2,6 +2,9 @@ package com.ak2.bookingcosplay.service.impl;
 
 import com.ak2.bookingcosplay.dto.RequestUpdateBooking;
 import com.ak2.bookingcosplay.dto.ResponseDefault;
+import com.ak2.bookingcosplay.dto.ResponseDetailBooking;
+import com.ak2.bookingcosplay.dto.ResponsePendingBooking;
+import com.ak2.bookingcosplay.dto.ResponsePendingBooking.DataPendingBooking;
 import com.ak2.bookingcosplay.dto.RequestCreateBooking;
 import com.ak2.bookingcosplay.entity.Booking;
 import com.ak2.bookingcosplay.entity.User;
@@ -104,8 +107,52 @@ public class BookingServiceImpl implements BookingService {
   }
 
   @Override
-  public Optional<Booking> getBookingById(Long id) {
-    return bookingRepository.findById(id);
+  public ResponsePendingBooking getBookingByStatus(String status) {
+    List<Booking> bookings = bookingRepository.findByStatus(status.toUpperCase());
+
+    List<ResponsePendingBooking.DataPendingBooking> dataList = bookings.stream().map(booking -> {
+      DataPendingBooking data = new ResponsePendingBooking.DataPendingBooking();
+      data.setId(booking.getId());
+      data.setNameUser(booking.getUser().getName());
+      data.setNameItem(booking.getItem().getName());
+      data.setStartDate(booking.getStartDate().toString());
+      data.setDuration(booking.getDuration() + " hari");
+
+      int total = booking.getItem().getPricePerDay() * booking.getDuration();
+      data.setTotalPrice(total);
+      data.setStatus(booking.getStatus());
+      return data;
+    }).toList();
+
+    ResponsePendingBooking response = new ResponsePendingBooking();
+    response.setStatus(true);
+    response.setMessage("Data booking dengan status " + status);
+    response.setData(dataList);
+    return response;
+  }
+
+  public ResponseDetailBooking getBookingDetailById(Long id) {
+    ResponseDetailBooking response = new ResponseDetailBooking();
+    Optional<Booking> opt = bookingRepository.findById(id);
+    if (opt.isEmpty()) {
+      response.setStatus(false);
+      response.setMessage("Id booking tidak ditemukan");
+      return response;
+    }
+    Booking booking = opt.get();
+    var data = new ResponseDetailBooking.DataDetailBooking();
+    data.setId(booking.getId());
+    data.setNameUser(booking.getUser().getName());
+    data.setItemName(booking.getItem().getName());
+    data.setStartDate(booking.getStartDate().toString());
+    data.setDuration(booking.getDuration());
+    data.setTotalPrice(booking.getItem().getPricePerDay() * booking.getDuration());
+    data.setStatus(booking.getStatus());
+
+    response.setStatus(true);
+    response.setMessage("Detail booking ditemukan");
+    response.setData(data);
+    return response;
   }
 
   @Override
