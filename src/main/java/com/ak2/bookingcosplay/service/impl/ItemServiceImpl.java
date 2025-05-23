@@ -22,6 +22,64 @@ public class ItemServiceImpl implements ItemService {
   private ItemRepository itemRepository;
 
   @Override
+  public ResponseCardItem getAllItems() {
+    List<Item> itemCard = itemRepository.findByDeletedFalse();
+    ResponseCardItem response = new ResponseCardItem();
+
+    if (itemCard.isEmpty()) {
+
+      response.setStatus(false);
+      response.setMessage("Item masih Kosong");
+      response.setData(null);
+      return response;
+    }
+    List<ResponseCardItem.DataCardItem> dataList = itemCard.stream().map(item -> {
+      ResponseCardItem.DataCardItem data = new ResponseCardItem.DataCardItem();
+      data.setId(item.getId());
+      data.setName(item.getName());
+      data.setPrice(item.getPricePerDay());
+
+      if (item instanceof Costume) {
+        data.setCategory("Costume");
+      } else if (item instanceof Accessory) {
+        data.setCategory("Accessory");
+      }
+
+      return data;
+    }).collect(Collectors.toList());
+
+    response.setStatus(true);
+    response.setMessage("Item berhasil dimuat");
+    response.setData(dataList);
+
+    return response;
+  }
+
+  @Override
+  public ResponseDetailItem getItemById(Long id) {
+    try {
+      ResponseDetailItem response = new ResponseDetailItem();
+      Item item = itemRepository.findById(id)
+          .filter(i -> !i.isDeleted())
+          .orElse(null);
+      if (item == null) {
+        response.setStatus(false);
+        response.setMessage("Item tidak ditemukan");
+        return response;
+      }
+      response.setStatus(true);
+      response.setMessage("Item ditemukan");
+      response.setData(item);
+      return response;
+    } catch (Exception e) {
+      ResponseDetailItem response = new ResponseDetailItem();
+      response.setStatus(false);
+      response.setMessage("Gagal mendapatkan item: " + e.getMessage());
+      return response;
+    }
+  }
+
+  @Override
   public ResponseDefault createItem(Item item) {
     try {
       itemRepository.save(item);
@@ -37,66 +95,6 @@ public class ItemServiceImpl implements ItemService {
       ResponseDefault response = new ResponseDefault();
       response.setStatus(false);
       response.setMessage("Gagal menambahkan item: " + e.getMessage());
-      return response;
-    }
-  }
-
-  @Override
-  public ResponseCardItem getAllItems() {
-    List<Item> itemCard = itemRepository.findByDeletedFalse(); // Ambil data item yang tidak dihapus
-    ResponseCardItem response = new ResponseCardItem();
-
-    if (itemCard.isEmpty()) {
-      // Jika data kosong
-      response.setStatus(false);
-      response.setMessage("Item masih Kosong");
-      response.setData(null); // Data adalah null jika tidak ada item
-      return response; // Kembalikan response langsung
-    }
-
-    // Jika ada item, konversi item menjadi list ResponseCardItem
-    List<ResponseCardItem.DataCardItem> dataList = itemCard.stream().map(item -> {
-      ResponseCardItem.DataCardItem data = new ResponseCardItem.DataCardItem();
-      data.setId(item.getId());
-      data.setName(item.getName());
-      data.setPrice(item.getPricePerDay()); // Atur harga per hari
-
-      // Tentukan kategori berdasarkan jenis item
-      if (item instanceof Costume) {
-        data.setCategory("Costume");
-      } else if (item instanceof Accessory) {
-        data.setCategory("Accessory");
-      }
-
-      return data;
-    }).collect(Collectors.toList()); // Mengumpulkan semua DataCardItem ke dalam list
-
-    // Mengatur response setelah data ada
-    response.setStatus(true);
-    response.setMessage("Item berhasil dimuat");
-    response.setData(dataList); // Set data menjadi list dari DataCardItem
-
-    return response; // Kembalikan response dengan data yang sudah terisi
-  }
-
-  @Override
-  public ResponseDetailItem getItemById(Long id) {
-    try {
-      ResponseDetailItem response = new ResponseDetailItem();
-      Item item = itemRepository.findById(id).orElse(null);
-      if (item == null) {
-        response.setStatus(false);
-        response.setMessage("Item tidak ditemukan");
-        return response;
-      }
-      response.setStatus(true);
-      response.setMessage("Item ditemukan");
-      response.setItem(item);
-      return response;
-    } catch (Exception e) {
-      ResponseDetailItem response = new ResponseDetailItem();
-      response.setStatus(false);
-      response.setMessage("Gagal mendapatkan item: " + e.getMessage());
       return response;
     }
   }

@@ -1,6 +1,7 @@
 package com.ak2.bookingcosplay.service;
 
 import com.ak2.bookingcosplay.dto.RequestUpdateBooking;
+import com.ak2.bookingcosplay.dto.ResponseDefault;
 import com.ak2.bookingcosplay.dto.RequestCreateBooking;
 import com.ak2.bookingcosplay.entity.Booking;
 
@@ -12,7 +13,7 @@ public interface BookingService {
 
   // String createBooking(Long userId, Long itemId, LocalDate startDate, int
   // duration);
-  String createBooking(RequestCreateBooking request);
+  ResponseDefault createBooking(RequestCreateBooking request);
 
   List<Booking> getAllBooking();
 

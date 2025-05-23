@@ -2,12 +2,13 @@ package com.ak2.bookingcosplay.controller;
 
 import com.ak2.bookingcosplay.entity.Booking;
 import com.ak2.bookingcosplay.dto.RequestUpdateBooking;
+import com.ak2.bookingcosplay.dto.ResponseDefault;
 import com.ak2.bookingcosplay.dto.RequestCreateBooking;
 import com.ak2.bookingcosplay.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,8 +30,12 @@ public class BookingController {
   }
 
   @PostMapping
-  public String createBooking(@RequestBody RequestCreateBooking request) {
-    return bookingService.createBooking(request);
+  public ResponseEntity<ResponseDefault> createBooking(@RequestBody RequestCreateBooking request) {
+    ResponseDefault response = bookingService.createBooking(request);
+    if (!response.isStatus()) {
+      return ResponseEntity.badRequest().body(response);
+    }
+    return ResponseEntity.status(201).body(response);
   }
 
   @PutMapping("/{id}")

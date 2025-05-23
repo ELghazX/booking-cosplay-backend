@@ -8,11 +8,11 @@ import com.ak2.bookingcosplay.dto.ResponseDetailItem;
 import com.ak2.bookingcosplay.entity.Accessory;
 import com.ak2.bookingcosplay.entity.Costume;
 import com.ak2.bookingcosplay.service.ItemService;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/items")
@@ -22,15 +22,19 @@ public class ItemController {
   private ItemService itemService;
 
   @GetMapping
-  public ResponseCardItem getAllItems() {
-    return itemService.getAllItems();
+  public ResponseEntity<ResponseCardItem> getAllItems() {
+    ResponseCardItem response = itemService.getAllItems();
+    if (response.isStatus() == false) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+    return ResponseEntity.ok(response);
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<ResponseDetailItem> getItemById(@PathVariable Long id) {
     ResponseDetailItem response = itemService.getItemById(id);
     if (response.isStatus() == false) {
-      return ResponseEntity.badRequest().body(response);
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
     return ResponseEntity.ok(response);
   }
@@ -46,7 +50,7 @@ public class ItemController {
     costume.setCharacterName(request.getCharacterName());
     ResponseDefault response = itemService.createItem(costume);
     if (response.isStatus() == false) {
-      return ResponseEntity.badRequest().body(response);
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
     return ResponseEntity.ok(response);
   }
@@ -60,7 +64,7 @@ public class ItemController {
     accessory.setType(request.getType());
     ResponseDefault response = itemService.createItem(accessory);
     if (response.isStatus() == false) {
-      return ResponseEntity.badRequest().body(response);
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
     return ResponseEntity.ok(response);
   }
@@ -75,7 +79,7 @@ public class ItemController {
     accessory.setType(request.getType());
     ResponseDefault response = itemService.updateItem(id, accessory);
     if (response.isStatus() == false) {
-      return ResponseEntity.badRequest().body(response);
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
     return ResponseEntity.ok(response);
   }
@@ -92,7 +96,7 @@ public class ItemController {
     costume.setCharacterName(request.getCharacterName());
     ResponseDefault response = itemService.updateItem(id, costume);
     if (response.isStatus() == false) {
-      return ResponseEntity.badRequest().body(response);
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
     return ResponseEntity.ok(response);
   }
@@ -102,7 +106,7 @@ public class ItemController {
   public ResponseEntity<ResponseDefault> deleteItem(@PathVariable Long id) {
     ResponseDefault response = itemService.deleteItem(id);
     if (response.isStatus() == false) {
-      return ResponseEntity.badRequest().body(response);
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
     return ResponseEntity.ok(response);
   }
