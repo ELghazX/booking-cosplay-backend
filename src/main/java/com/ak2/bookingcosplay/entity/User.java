@@ -1,6 +1,9 @@
 package com.ak2.bookingcosplay.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
 public class User {
@@ -11,11 +14,9 @@ public class User {
 
   private String name;
   private String email;
-  private String phone; // New field for phone number
+  private String phone;
   private String password;
-  private String role = "USER"; // Default role is "USER"
-
-  // Getters and Setters
+  private String role = "USER";
 
   public Long getId() {
     return id;

@@ -5,8 +5,6 @@ import com.ak2.bookingcosplay.dto.ResponseDefault;
 import com.ak2.bookingcosplay.dto.ResponseDetailItem;
 import com.ak2.bookingcosplay.entity.Item;
 
-import java.util.List;
-
 public interface ItemService {
   ResponseDefault createItem(Item item);
 

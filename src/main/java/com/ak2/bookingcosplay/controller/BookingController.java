@@ -1,17 +1,24 @@
 package com.ak2.bookingcosplay.controller;
 
-import com.ak2.bookingcosplay.entity.Booking;
-import com.ak2.bookingcosplay.dto.RequestUpdateBooking;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ak2.bookingcosplay.dto.RequestCreateBooking;
+import com.ak2.bookingcosplay.dto.RequestUpdateBookingStatus;
 import com.ak2.bookingcosplay.dto.ResponseDefault;
 import com.ak2.bookingcosplay.dto.ResponseDetailBooking;
 import com.ak2.bookingcosplay.dto.ResponsePendingBooking;
-import com.ak2.bookingcosplay.dto.RequestCreateBooking;
+import com.ak2.bookingcosplay.entity.Booking;
 import com.ak2.bookingcosplay.service.BookingService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/bookings")
@@ -48,9 +55,11 @@ public class BookingController {
     return ResponseEntity.status(201).body(response);
   }
 
-  @PutMapping("/{id}")
-  public String updateBooking(@PathVariable Long id, @RequestBody RequestUpdateBooking request) {
+  @PutMapping("/{id}/status")
+  public ResponseEntity<ResponseDefault> updateBookingStatus(@PathVariable Long id,
+      @RequestBody RequestUpdateBookingStatus request) {
     request.setId(id);
-    return bookingService.updateBooking(request);
+    ResponseDefault response = bookingService.updateBookingStatus(request);
+    return ResponseEntity.ok(response);
   }
 }

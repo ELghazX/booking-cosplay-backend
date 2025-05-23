@@ -1,23 +1,24 @@
 package com.ak2.bookingcosplay.service.impl;
 
-import com.ak2.bookingcosplay.dto.RequestUpdateBooking;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.ak2.bookingcosplay.dto.RequestCreateBooking;
+import com.ak2.bookingcosplay.dto.RequestUpdateBookingStatus;
 import com.ak2.bookingcosplay.dto.ResponseDefault;
 import com.ak2.bookingcosplay.dto.ResponseDetailBooking;
 import com.ak2.bookingcosplay.dto.ResponsePendingBooking;
 import com.ak2.bookingcosplay.dto.ResponsePendingBooking.DataPendingBooking;
-import com.ak2.bookingcosplay.dto.RequestCreateBooking;
 import com.ak2.bookingcosplay.entity.Booking;
-import com.ak2.bookingcosplay.entity.User;
 import com.ak2.bookingcosplay.entity.Item;
+import com.ak2.bookingcosplay.entity.User;
 import com.ak2.bookingcosplay.repository.BookingRepository;
-import com.ak2.bookingcosplay.repository.UserRepository;
 import com.ak2.bookingcosplay.repository.ItemRepository;
+import com.ak2.bookingcosplay.repository.UserRepository;
 import com.ak2.bookingcosplay.service.BookingService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BookingServiceImpl implements BookingService {
@@ -72,34 +73,6 @@ public class BookingServiceImpl implements BookingService {
       return response;
     }
   }
-
-  // @Override
-  // public String createBooking(Long userId, Long itemId, LocalDate startDate,
-  // int duration) {
-  //
-  // Booking booking = new Booking();
-  // Optional<User> userOpt = userRepository.findById(userId);
-  // if (userOpt.isPresent()) {
-  // User user = userOpt.get();
-  // booking.setUser(userOpt.get());
-  // } else {
-  // return "Id user tidak ditemukan";
-  // }
-  // Optional<Item> itemOpt = itemRepository.findById(itemId);
-  //
-  // if (itemOpt.isPresent()) {
-  // Item item = itemOpt.get();
-  // booking.setItem(item);
-  // } else {
-  // return "Id Item tidak ditemukan";
-  // }
-  // booking.setStartDate(startDate);
-  // booking.setDuration(duration);
-  // booking.setStatus("PENDING");
-  //
-  // bookingRepository.save(booking);
-  // return "booking berhasil";
-  // }
 
   @Override
   public List<Booking> getAllBooking() {
@@ -156,24 +129,34 @@ public class BookingServiceImpl implements BookingService {
   }
 
   @Override
-  public String updateBooking(RequestUpdateBooking request) {
-    Booking bookingOpt = bookingRepository.findById(request.getId()).orElse(null);
-    if (bookingOpt != null) {
-      bookingOpt.setStatus(request.getStatus());
-      bookingRepository.save(bookingOpt);
-      return "Update booking berhasil";
-    } else {
-      return "Id booking tidak ditemukan";
+  public ResponseDefault updateBookingStatus(RequestUpdateBookingStatus request) {
+    ResponseDefault response = new ResponseDefault();
+
+    Optional<Booking> optBooking = bookingRepository.findById(request.getId());
+
+    if (optBooking.isEmpty()) {
+      response.setStatus(false);
+      response.setMessage("Booking dengan ID " + request.getId() + " tidak ditemukan");
+      return response;
     }
 
+    Booking booking = optBooking.get();
+
+    List<String> allowedStatuses = List.of("PENDING", "CONFIRMED", "CANCELLED");
+    String newStatus = request.getStatus().toUpperCase();
+
+    if (!allowedStatuses.contains(newStatus)) {
+      response.setStatus(false);
+      response.setMessage("Status tidak valid: " + request.getStatus());
+      return response;
+    }
+
+    booking.setStatus(newStatus);
+    bookingRepository.save(booking);
+
+    response.setStatus(true);
+    response.setMessage("Status booking berhasil diperbarui ke: " + newStatus);
+    return response;
   }
 
-  // @Override
-  // public void deleteBooking(Long id) {
-  // Booking item = BookingRepository.findById(id).orElse(null);
-  // if (item != null) {
-  // item.setDeleted(true);
-  // BookingRepository.save(item);
-  // }
-  // }
 }

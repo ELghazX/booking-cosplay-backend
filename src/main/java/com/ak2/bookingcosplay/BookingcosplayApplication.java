@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class BookingcosplayApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(BookingcosplayApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(BookingcosplayApplication.class, args);
+  }
 
 }
