@@ -3,6 +3,7 @@ package com.ak2.bookingcosplay.service.impl;
 import com.ak2.bookingcosplay.entity.User;
 import com.ak2.bookingcosplay.dto.ResponseLoginUser;
 import com.ak2.bookingcosplay.dto.ResponseRegister;
+import com.ak2.bookingcosplay.dto.ResponseLoginUser.Infokan;
 import com.ak2.bookingcosplay.repository.UserRepository;
 import com.ak2.bookingcosplay.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,12 +58,13 @@ public class UserServiceImpl implements UserService {
         response.setMessage("Password salah");
         return response;
       }
-      response.setId(user.getId());
-      response.setName(user.getName());
-      response.setRole(user.getRole());
+      Infokan data = new Infokan();
+      data.setId(user.getId());
+      data.setName(user.getName());
+      data.setRole(user.getRole());
       response.setStatus(true);
       response.setMessage("Login Berhasil");
-
+      response.setData(data);
     } catch (Exception e) {
       response.setStatus(false);
       response.setMessage("Login gagal: " + e.getMessage());

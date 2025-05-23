@@ -4,13 +4,12 @@ import com.ak2.bookingcosplay.dto.RequestCreateAccessory;
 import com.ak2.bookingcosplay.dto.RequestCreateCostume;
 import com.ak2.bookingcosplay.dto.ResponseCardItem;
 import com.ak2.bookingcosplay.dto.ResponseDefault;
+import com.ak2.bookingcosplay.dto.ResponseDetailItem;
 import com.ak2.bookingcosplay.entity.Accessory;
 import com.ak2.bookingcosplay.entity.Costume;
-import com.ak2.bookingcosplay.entity.Item;
 import com.ak2.bookingcosplay.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +21,21 @@ public class ItemController {
   @Autowired
   private ItemService itemService;
 
-  @PostMapping("/costume")
+  @GetMapping
+  public ResponseCardItem getAllItems() {
+    return itemService.getAllItems();
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<ResponseDetailItem> getItemById(@PathVariable Long id) {
+    ResponseDetailItem response = itemService.getItemById(id);
+    if (response.isStatus() == false) {
+      return ResponseEntity.badRequest().body(response);
+    }
+    return ResponseEntity.ok(response);
+  }
+
+  @PostMapping("/create-costume")
   public ResponseEntity<ResponseDefault> createCostume(@RequestBody RequestCreateCostume request) {
     Costume costume = new Costume();
     costume.setName(request.getName());
@@ -38,7 +51,7 @@ public class ItemController {
     return ResponseEntity.ok(response);
   }
 
-  @PostMapping("/accessory")
+  @PostMapping("/create-accessory")
   public ResponseEntity<ResponseDefault> createAccessory(@RequestBody RequestCreateAccessory request) {
     Accessory accessory = new Accessory();
     accessory.setName(request.getName());
@@ -52,25 +65,45 @@ public class ItemController {
     return ResponseEntity.ok(response);
   }
 
-  @GetMapping
-  public List<ResponseCardItem> getAllItems() {
-    return itemService.getAllItems();
+  @PutMapping("update-accessory/{id}")
+  public ResponseEntity<ResponseDefault> updateAccessory(@PathVariable Long id,
+      @RequestBody RequestCreateAccessory request) {
+    Accessory accessory = new Accessory();
+    accessory.setName(request.getName());
+    accessory.setImageUrl(request.getImageUrl());
+    accessory.setPricePerDay(request.getPricePerDay());
+    accessory.setType(request.getType());
+    ResponseDefault response = itemService.updateItem(id, accessory);
+    if (response.isStatus() == false) {
+      return ResponseEntity.badRequest().body(response);
+    }
+    return ResponseEntity.ok(response);
   }
 
-  @GetMapping("/{id}")
-  public Item getItemById(@PathVariable Long id) {
-    return itemService.getItemById(id);
-  }
-
-  // Update item by ID
-  @PutMapping("/{id}")
-  public Item updateItem(@PathVariable Long id, @RequestBody Item item) {
-    return itemService.updateItem(id, item);
+  @PutMapping("update-costume/{id}")
+  public ResponseEntity<ResponseDefault> updateCostume(@PathVariable Long id,
+      @RequestBody RequestCreateCostume request) {
+    Costume costume = new Costume();
+    costume.setName(request.getName());
+    costume.setImageUrl(request.getImageUrl());
+    costume.setPricePerDay(request.getPricePerDay());
+    costume.setSize(request.getSize());
+    costume.setGender(request.getGender());
+    costume.setCharacterName(request.getCharacterName());
+    ResponseDefault response = itemService.updateItem(id, costume);
+    if (response.isStatus() == false) {
+      return ResponseEntity.badRequest().body(response);
+    }
+    return ResponseEntity.ok(response);
   }
 
   // Soft delete item by ID
   @DeleteMapping("/{id}")
-  public void deleteItem(@PathVariable Long id) {
-    itemService.deleteItem(id);
+  public ResponseEntity<ResponseDefault> deleteItem(@PathVariable Long id) {
+    ResponseDefault response = itemService.deleteItem(id);
+    if (response.isStatus() == false) {
+      return ResponseEntity.badRequest().body(response);
+    }
+    return ResponseEntity.ok(response);
   }
 }

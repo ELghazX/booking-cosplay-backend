@@ -2,6 +2,7 @@ package com.ak2.bookingcosplay.service;
 
 import com.ak2.bookingcosplay.dto.ResponseCardItem;
 import com.ak2.bookingcosplay.dto.ResponseDefault;
+import com.ak2.bookingcosplay.dto.ResponseDetailItem;
 import com.ak2.bookingcosplay.entity.Item;
 
 import java.util.List;
@@ -9,11 +10,11 @@ import java.util.List;
 public interface ItemService {
   ResponseDefault createItem(Item item);
 
-  List<ResponseCardItem> getAllItems();
+  ResponseCardItem getAllItems();
 
-  Item getItemById(Long id);
+  ResponseDetailItem getItemById(Long id);
 
-  Item updateItem(Long id, Item item);
+  ResponseDefault updateItem(Long id, Item Item);
 
-  void deleteItem(Long id);
+  ResponseDefault deleteItem(Long id);
 }
