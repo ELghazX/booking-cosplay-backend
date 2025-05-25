@@ -88,7 +88,7 @@ public class BookingServiceImpl implements BookingService {
       data.setId(booking.getId());
       data.setNameUser(booking.getUser().getName());
       data.setNameItem(booking.getItem().getName());
-      data.setStartDate(booking.getStartDate().toString());
+      data.setStartDate(booking.getStartDate());
       data.setDuration(booking.getDuration() + " hari");
 
       int total = booking.getItem().getPricePerDay() * booking.getDuration();
@@ -117,13 +117,12 @@ public class BookingServiceImpl implements BookingService {
     data.setId(booking.getId());
     data.setNameUser(booking.getUser().getName());
     data.setItemName(booking.getItem().getName());
-    data.setStartDate(booking.getStartDate().toString());
+    data.setStartDate(booking.getStartDate());
     data.setDuration(booking.getDuration());
     data.setTotalPrice(booking.getItem().getPricePerDay() * booking.getDuration());
     data.setStatus(booking.getStatus());
     data.setPhone(booking.getUser().getPhone());
     data.setPricePerDay(booking.getItem().getPricePerDay());
-
 
     response.setStatus(true);
     response.setMessage("Detail booking ditemukan");

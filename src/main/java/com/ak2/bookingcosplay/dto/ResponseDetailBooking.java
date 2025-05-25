@@ -1,5 +1,7 @@
 package com.ak2.bookingcosplay.dto;
 
+import java.time.LocalDate;
+
 public class ResponseDetailBooking {
   private boolean status;
   private String message;
@@ -34,7 +36,7 @@ public class ResponseDetailBooking {
     private String phone;
     private String nameUser;
     private String itemName;
-    private String startDate;
+    private LocalDate startDate;
     private int duration;
     private int pricePerDay;
     private int totalPrice;
@@ -80,14 +82,6 @@ public class ResponseDetailBooking {
       this.itemName = itemName;
     }
 
-    public String getStartDate() {
-      return startDate;
-    }
-
-    public void setStartDate(String startDate) {
-      this.startDate = startDate;
-    }
-
     public int getDuration() {
       return duration;
     }
@@ -110,6 +104,14 @@ public class ResponseDetailBooking {
 
     public void setStatus(String status) {
       this.status = status;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+      this.startDate = startDate;
+    }
+
+    public LocalDate getStartDate() {
+      return startDate;
     }
   }
 }
