@@ -121,6 +121,9 @@ public class BookingServiceImpl implements BookingService {
     data.setDuration(booking.getDuration());
     data.setTotalPrice(booking.getItem().getPricePerDay() * booking.getDuration());
     data.setStatus(booking.getStatus());
+    data.setPhone(booking.getUser().getPhone());
+    data.setPricePerDay(booking.getItem().getPricePerDay());
+
 
     response.setStatus(true);
     response.setMessage("Detail booking ditemukan");

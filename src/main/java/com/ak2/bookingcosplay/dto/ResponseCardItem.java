@@ -27,7 +27,16 @@ public class ResponseCardItem {
     private Long id;
     private String name;
     private int price;
+    private String imageUrl;
     private String category;
+
+    public String getImageUrl() {
+      return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+      this.imageUrl = imageUrl;
+    }
 
     public Long getId() {
       return id;

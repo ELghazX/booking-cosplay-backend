@@ -38,6 +38,7 @@ public class ItemServiceImpl implements ItemService {
       data.setId(item.getId());
       data.setName(item.getName());
       data.setPrice(item.getPricePerDay());
+      data.setImageUrl(item.getImageUrl());
 
       if (item instanceof Costume) {
         data.setCategory("Costume");
