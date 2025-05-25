@@ -31,14 +31,31 @@ public class ResponseDetailBooking {
 
   public static class DataDetailBooking {
     private Long id;
+    private String phone;
     private String nameUser;
     private String itemName;
     private String startDate;
     private int duration;
+    private int pricePerDay;
     private int totalPrice;
     private String status;
 
-    // Getters & Setters
+    public String getPhone() {
+      return phone;
+    }
+
+    public void setPhone(String phone) {
+      this.phone = phone;
+    }
+
+    public int getPricePerDay() {
+      return pricePerDay;
+    }
+
+    public void setPricePerDay(int pricePerDay) {
+      this.pricePerDay = pricePerDay;
+    }
+
     public Long getId() {
       return id;
     }
