@@ -18,4 +18,6 @@ public interface BookingService {
 
   ResponseDetailBooking getBookingDetailById(Long id);
 
+  ResponsePendingBooking getBookingByUserId(Long userId);
+
 }

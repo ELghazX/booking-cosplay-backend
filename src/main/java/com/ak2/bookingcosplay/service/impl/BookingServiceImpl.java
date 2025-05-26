@@ -100,6 +100,37 @@ public class BookingServiceImpl implements BookingService {
   }
 
   @Override
+  public ResponsePendingBooking getBookingByUserId(Long userId) {
+    ResponsePendingBooking response = new ResponsePendingBooking();
+
+    Optional<User> userOpt = userRepository.findById(userId);
+    if (userOpt.isEmpty()) {
+      response.setStatus(false);
+      response.setMessage("User tidak ditemukan");
+      return response;
+    }
+
+    List<Booking> bookings = bookingRepository.findByUserId(userId);
+
+    List<ResponsePendingBooking.DataPendingBooking> dataList = bookings.stream().map(booking -> {
+      DataPendingBooking data = new DataPendingBooking();
+      data.setId(booking.getId());
+      data.setNameUser(booking.getUser().getName());
+      data.setNameItem(booking.getItem().getName());
+      data.setStartDate(booking.getStartDate());
+      data.setDuration(booking.getDuration() + " hari");
+      data.setTotalPrice(booking.getItem().getPricePerDay() * booking.getDuration());
+      data.setStatus(booking.getStatus());
+      return data;
+    }).toList();
+
+    response.setStatus(true);
+    response.setMessage("Data booking milik user berhasil diambil");
+    response.setData(dataList);
+    return response;
+  }
+
+  @Override
   public ResponsePendingBooking getBookingByStatus(String status) {
     List<Booking> bookings = bookingRepository.findByStatus(status.toUpperCase());
 
