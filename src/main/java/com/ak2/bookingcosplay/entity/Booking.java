@@ -15,7 +15,7 @@ public class Booking {
   @JoinColumn(name = "user_id")
   private User user;
 
-  @OneToOne(optional = false)
+  @ManyToOne(optional = false)
   @JoinColumn(name = "item_id")
   private Item item;
 
