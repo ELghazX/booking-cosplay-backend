@@ -17,7 +17,6 @@ import com.ak2.bookingcosplay.dto.RequestUpdateBookingStatus;
 import com.ak2.bookingcosplay.dto.ResponseDefault;
 import com.ak2.bookingcosplay.dto.ResponseDetailBooking;
 import com.ak2.bookingcosplay.dto.ResponsePendingBooking;
-import com.ak2.bookingcosplay.entity.Booking;
 import com.ak2.bookingcosplay.service.BookingService;
 
 @RestController
@@ -28,8 +27,9 @@ public class BookingController {
   private BookingService bookingService;
 
   @GetMapping
-  public List<Booking> getAllBookings() {
-    return bookingService.getAllBooking();
+  public ResponseEntity<ResponsePendingBooking> getAllBookings() {
+    return ResponseEntity.ok(bookingService.getAllBooking());
+
   }
 
   @GetMapping("/status/{status}")
