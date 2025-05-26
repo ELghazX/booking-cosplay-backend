@@ -1,7 +1,5 @@
 package com.ak2.bookingcosplay.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +15,6 @@ import com.ak2.bookingcosplay.dto.RequestUpdateBookingStatus;
 import com.ak2.bookingcosplay.dto.ResponseDefault;
 import com.ak2.bookingcosplay.dto.ResponseDetailBooking;
 import com.ak2.bookingcosplay.dto.ResponsePendingBooking;
-import com.ak2.bookingcosplay.entity.Booking;
 import com.ak2.bookingcosplay.service.BookingService;
 
 @RestController
@@ -28,8 +25,9 @@ public class BookingController {
   private BookingService bookingService;
 
   @GetMapping
-  public List<Booking> getAllBookings() {
-    return bookingService.getAllBooking();
+  public ResponseEntity<ResponsePendingBooking> getAllBookings() {
+    return ResponseEntity.ok(bookingService.getAllBooking());
+
   }
 
   @GetMapping("/status/{status}")
@@ -61,5 +59,10 @@ public class BookingController {
     request.setId(id);
     ResponseDefault response = bookingService.updateBookingStatus(request);
     return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("/user/{userId}")
+  public ResponseEntity<ResponsePendingBooking> getBookingsByUser(@PathVariable Long userId) {
+    return ResponseEntity.ok(bookingService.getBookingByUserId(userId));
   }
 }

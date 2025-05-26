@@ -75,8 +75,59 @@ public class BookingServiceImpl implements BookingService {
   }
 
   @Override
-  public List<Booking> getAllBooking() {
-    return bookingRepository.findAll();
+  public ResponsePendingBooking getAllBooking() {
+    List<Booking> bookings = bookingRepository.findAll();
+
+    List<ResponsePendingBooking.DataPendingBooking> dataList = bookings.stream().map(booking -> {
+      DataPendingBooking data = new ResponsePendingBooking.DataPendingBooking();
+      data.setId(booking.getId());
+      data.setNameUser(booking.getUser().getName());
+      data.setNameItem(booking.getItem().getName());
+      data.setStartDate(booking.getStartDate());
+      data.setDuration(booking.getDuration() + " hari");
+
+      int total = booking.getItem().getPricePerDay() * booking.getDuration();
+      data.setTotalPrice(total);
+      data.setStatus(booking.getStatus());
+      return data;
+    }).toList();
+
+    ResponsePendingBooking response = new ResponsePendingBooking();
+    response.setStatus(true);
+    response.setMessage("Data Riwayat Booking berhasil diambil");
+    response.setData(dataList);
+    return response;
+  }
+
+  @Override
+  public ResponsePendingBooking getBookingByUserId(Long userId) {
+    ResponsePendingBooking response = new ResponsePendingBooking();
+
+    Optional<User> userOpt = userRepository.findById(userId);
+    if (userOpt.isEmpty()) {
+      response.setStatus(false);
+      response.setMessage("User tidak ditemukan");
+      return response;
+    }
+
+    List<Booking> bookings = bookingRepository.findByUserId(userId);
+
+    List<ResponsePendingBooking.DataPendingBooking> dataList = bookings.stream().map(booking -> {
+      DataPendingBooking data = new DataPendingBooking();
+      data.setId(booking.getId());
+      data.setNameUser(booking.getUser().getName());
+      data.setNameItem(booking.getItem().getName());
+      data.setStartDate(booking.getStartDate());
+      data.setDuration(booking.getDuration() + " hari");
+      data.setTotalPrice(booking.getItem().getPricePerDay() * booking.getDuration());
+      data.setStatus(booking.getStatus());
+      return data;
+    }).toList();
+
+    response.setStatus(true);
+    response.setMessage("Data booking milik user berhasil diambil");
+    response.setData(dataList);
+    return response;
   }
 
   @Override
@@ -88,7 +139,7 @@ public class BookingServiceImpl implements BookingService {
       data.setId(booking.getId());
       data.setNameUser(booking.getUser().getName());
       data.setNameItem(booking.getItem().getName());
-      data.setStartDate(booking.getStartDate().toString());
+      data.setStartDate(booking.getStartDate());
       data.setDuration(booking.getDuration() + " hari");
 
       int total = booking.getItem().getPricePerDay() * booking.getDuration();
@@ -117,13 +168,12 @@ public class BookingServiceImpl implements BookingService {
     data.setId(booking.getId());
     data.setNameUser(booking.getUser().getName());
     data.setItemName(booking.getItem().getName());
-    data.setStartDate(booking.getStartDate().toString());
+    data.setStartDate(booking.getStartDate());
     data.setDuration(booking.getDuration());
     data.setTotalPrice(booking.getItem().getPricePerDay() * booking.getDuration());
     data.setStatus(booking.getStatus());
     data.setPhone(booking.getUser().getPhone());
     data.setPricePerDay(booking.getItem().getPricePerDay());
-
 
     response.setStatus(true);
     response.setMessage("Detail booking ditemukan");
