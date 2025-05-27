@@ -1,4 +1,4 @@
-# Penyedia API Booking Cosplay
+# Penyedia API Booking Cosplay ChocoMintCos
 
 # Cara menjalankan
 
